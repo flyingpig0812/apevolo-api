@@ -47,8 +47,9 @@ public class TokenService : ITokenService
         var nowTime = DateTime.Now;
         if (refreshTime == 0)
         {
-            refreshTime = nowTime.AddMinutes(jwtAuthOptions.RefreshTokenExpires).ToUnixTimeStampMillisecond();
+            refreshTime = nowTime.AddHours(jwtAuthOptions.RefreshTokenExpires).ToUnixTimeStampMillisecond();
         }
+
         var cls = new List<Claim>
         {
             new(AuthConstants.JwtClaimTypes.Jti, loginUserInfo.UserId.ToString()),
@@ -57,7 +58,7 @@ public class TokenService : ITokenService
             new(AuthConstants.JwtClaimTypes.DeptId, loginUserInfo.DeptId.ToString()),
             new(AuthConstants.JwtClaimTypes.Iat, nowTime.ToUnixTimeStampMillisecond().ToString()),
             new(AuthConstants.JwtClaimTypes.Ip, loginUserInfo.Ip),
-            new(AuthConstants.JwtClaimTypes.RefreshTime,refreshTime.toString())
+            new(AuthConstants.JwtClaimTypes.RefreshTime, refreshTime.toString())
         };
         var identity = new ClaimsIdentity(AuthConstants.JwtTokenType);
         identity.AddClaims(cls);
@@ -68,11 +69,11 @@ public class TokenService : ITokenService
             audience: jwtAuthOptions.Audience,
             claims: cls,
             notBefore: nowTime,
-            expires: nowTime.AddMinutes(jwtAuthOptions.Expires),
+            expires: nowTime.AddHours(jwtAuthOptions.Expires),
             signingCredentials: signinCredentials
         );
 
-        var expires = nowTime.AddMinutes(jwtAuthOptions.Expires).ToUnixTimeStampMillisecond();
+        var expires = nowTime.AddHours(jwtAuthOptions.Expires).ToUnixTimeStampMillisecond();
         var token = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
         if (refresh)
         {
