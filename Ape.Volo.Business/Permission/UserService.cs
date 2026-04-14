@@ -202,9 +202,7 @@ public class UserService : BaseServices<User>, IUserService
         var conditionalModels = await GetConditionalModel(userQueryCriteria);
         var queryOptions = new QueryOptions<User>
         {
-            Pagination = pagination,
-            ConditionalModels = conditionalModels,
-            IsIncludes = true
+            Pagination = pagination, ConditionalModels = conditionalModels, IsIncludes = true
         };
         var users = await TablePageAsync(queryOptions);
 
@@ -313,12 +311,7 @@ public class UserService : BaseServices<User>, IUserService
         user.NickName = updateUserCenterDto.NickName;
         user.GenderCode = updateUserCenterDto.GenderCode;
         user.Phone = updateUserCenterDto.Phone;
-        var result = await UpdateAsync(user, x => new
-        {
-            x.NickName,
-            x.GenderCode,
-            x.Phone
-        });
+        var result = await UpdateAsync(user, x => new { x.NickName, x.GenderCode, x.Phone });
         return OperateResult.Result(result);
     }
 
@@ -371,6 +364,38 @@ public class UserService : BaseServices<User>, IUserService
 
         return OperateResult.Success();
     }
+
+
+    /// <summary>
+    /// 更新用户界面偏好配置
+    /// </summary>
+    /// <param name="updateUserPreferencesConfigDto"></param>
+    /// <returns></returns>
+    public async Task<OperateResult> UpdatePreferencesConfigAsync(
+        UpdateUserPreferencesConfigDto updateUserPreferencesConfigDto)
+    {
+        var curUser = await TableWhere(x => x.Id == App.HttpUser.Id).FirstAsync();
+        if (curUser.IsNull())
+        {
+            return OperateResult.Error(ValidationError.NotExist());
+        }
+
+        curUser.PreferencesConfig = updateUserPreferencesConfigDto.PreferencesConfig;
+        var isTrue = await UpdateAsync(curUser, x => x.PreferencesConfig);
+        if (isTrue)
+        {
+            //清理缓存
+            await App.Cache.RemoveAsync(GlobalConstants.CachePrefix.UserInfoById +
+                                        curUser.Id.ToString().ToMd5String16());
+
+            //退出当前用户
+            await App.Cache.RemoveAsync(GlobalConstants.CachePrefix.OnlineKey +
+                                        App.HttpUser.JwtToken.ToMd5String16());
+        }
+
+        return OperateResult.Success();
+    }
+
 
     /// <summary>
     /// 修改邮箱
@@ -468,7 +493,9 @@ public class UserService : BaseServices<User>, IUserService
         await SugarClient.Deleteable<UserRole>().Where(x => x.UserId == updateUserRole.Id).ExecuteCommandAsync();
         var userRoles = new List<UserRole>();
         userRoles.AddRange(updateUserRole.RoleIdArray.Select(r => new UserRole
-        { UserId = updateUserRole.Id, RoleId = r }));
+        {
+            UserId = updateUserRole.Id, RoleId = r
+        }));
         await SugarClient.Insertable(userRoles).ExecuteCommandAsync();
         return OperateResult.Success();
     }
@@ -491,8 +518,7 @@ public class UserService : BaseServices<User>, IUserService
         await UpdateAsync(user);
         await SugarClient.Deleteable<UserJob>().Where(x => x.UserId == updateUserJob.Id).ExecuteCommandAsync();
         var userRoles = new List<UserJob>();
-        userRoles.AddRange(updateUserJob.JobIdArray.Select(r => new UserJob
-        { UserId = updateUserJob.Id, JobId = r }));
+        userRoles.AddRange(updateUserJob.JobIdArray.Select(r => new UserJob { UserId = updateUserJob.Id, JobId = r }));
         await SugarClient.Insertable(userRoles).ExecuteCommandAsync();
         return OperateResult.Success();
     }

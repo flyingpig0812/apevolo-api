@@ -95,6 +95,14 @@ public interface IUserService : IBaseServices<User>
 
 
     /// <summary>
+    /// 修改密码UpdatePreferencesConfigAsync
+    /// </summary>
+    /// <param name="updateUserPreferencesConfig"></param>
+    /// <returns></returns>
+    Task<OperateResult> UpdatePreferencesConfigAsync(UpdateUserPreferencesConfigDto updateUserPreferencesConfig);
+
+
+    /// <summary>
     /// 修改邮箱
     /// </summary>
     /// <param name="updateUserEmailDto"></param>

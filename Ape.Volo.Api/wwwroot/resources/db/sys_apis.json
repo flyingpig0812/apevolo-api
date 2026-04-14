@@ -934,5 +934,13 @@
     "Method": "GET",
     "CreateBy": "apevolo",
     "Id": 163529871138997
+  },
+  {
+    "Group": "用户管理",
+    "Url": "/user/update/preferencesConfig",
+    "Description": "编辑用户界面偏好配置",
+    "Method": "PUT",
+    "CreateBy": "apevolo",
+    "Id": 290683606397005
   }
 ]

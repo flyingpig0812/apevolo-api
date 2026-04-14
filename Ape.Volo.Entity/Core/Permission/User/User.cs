@@ -72,6 +72,13 @@ namespace Ape.Volo.Entity.Core.Permission.User
         public int? TenantId { get; set; }
 
 
+        /// <summary>
+        /// 界面偏好配置
+        /// </summary>
+        [SugarColumn(Length = 500)]
+        public string? PreferencesConfig { get; set; }
+
+
         #region 扩展属性
 
         /// <summary>

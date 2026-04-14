@@ -128,15 +128,16 @@ public class UserController : BaseApiController
     }
 
     /// <summary>
-    /// 修改密码
+    /// 修改用户界面偏好配置
     /// </summary>
-    /// <param name="updateUserPassDto"></param>
+    /// <param name="updateUserPreferencesConfigDto"></param>
     /// <returns></returns>
     [HttpPut]
-    [Route("update/password")]
-    [Description("Action.UpdatePassword")]
+    [Route("update/preferencesConfig")]
+    [Description("Action.PreferencesConfig")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResultVm))]
-    public async Task<ActionResult> UpdatePasswordAsync([FromBody] UpdateUserPassDto updateUserPassDto)
+    public async Task<ActionResult> UpdatePreferencesConfigAsync(
+        [FromBody] UpdateUserPreferencesConfigDto updateUserPreferencesConfigDto)
     {
         if (!ModelState.IsValid)
         {
@@ -144,7 +145,7 @@ public class UserController : BaseApiController
             return Error(actionError);
         }
 
-        var result = await _userService.UpdatePasswordAsync(updateUserPassDto);
+        var result = await _userService.UpdatePreferencesConfigAsync(updateUserPreferencesConfigDto);
         return Ok(result);
     }
 
@@ -186,6 +187,28 @@ public class UserController : BaseApiController
         }
 
         var result = await _userService.UpdateAvatarAsync(avatar);
+        return Ok(result);
+    }
+
+
+    /// <summary>
+    /// 修改密码
+    /// </summary>
+    /// <param name="updateUserPassDto"></param>
+    /// <returns></returns>
+    [HttpPut]
+    [Route("update/password")]
+    [Description("Action.UpdatePassword")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResultVm))]
+    public async Task<ActionResult> UpdatePreferencesAsync([FromBody] UpdateUserPassDto updateUserPassDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            var actionError = ModelState.GetErrors();
+            return Error(actionError);
+        }
+
+        var result = await _userService.UpdatePasswordAsync(updateUserPassDto);
         return Ok(result);
     }
 

@@ -78,6 +78,11 @@ public class UserVo : BaseEntityDto<long>
     public DateTime? PasswordReSetTime { get; set; }
 
     /// <summary>
+    /// 界面偏好配置
+    /// </summary>
+    public string PreferencesConfig { get; set; }
+
+    /// <summary>
     /// 角色列表
     /// </summary>
     public List<RoleSmallVo> Roles { get; set; }

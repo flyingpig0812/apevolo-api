@@ -12,7 +12,8 @@
     "PasswordResetTime": null,
     "GenderCode": 1,
     "CreateBy": "apevolo",
-    "TenantId": null
+    "TenantId": null,
+    "PreferencesConfig" : null
   },
   {
     "Id": 163519427764301,
@@ -27,6 +28,7 @@
     "PasswordResetTime": null,
     "GenderCode": 1,
     "CreateBy": "apevolo",
-    "TenantId": 1001
+    "TenantId": 1001,
+    "PreferencesConfig" : null
   }
 ]
