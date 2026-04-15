@@ -135,7 +135,7 @@ public class UserController : BaseApiController
     [HttpPut]
     [Route("update/preferencesConfig")]
     [Description("Action.PreferencesConfig")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActionResultVm))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> UpdatePreferencesConfigAsync(
         [FromBody] UpdateUserPreferencesConfigDto updateUserPreferencesConfigDto)
     {
